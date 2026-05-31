@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ein neuer Hund 🐶</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #FAF6EF;
+      font-family: Georgia, serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 4px 24px rgba(27,67,50,0.10);
+      overflow: hidden;
+    }
+    .card-header {
+      background: #1B4332;
+      padding: 1.5rem 2rem;
+      text-align: center;
+    }
+    .card-header h1 {
+      color: #FAF6EF;
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .card-header p {
+      color: #9fc4b0;
+      font-size: 13px;
+      font-family: Arial, sans-serif;
+    }
+    .story {
+      padding: 2rem;
+    }
+    .sentence {
+      font-size: 17px;
+      line-height: 1.8;
+      color: #2d4a3e;
+      margin-bottom: 0.6rem;
+      padding: 6px 10px;
+      border-radius: 6px;
+      transition: background 0.3s;
+      cursor: pointer;
+      display: block;
+    }
+    .sentence:hover {
+      background: #f0ece2;
+    }
+    .sentence.active {
+      background: #C9A84C22;
+      border-left: 3px solid #C9A84C;
+      padding-left: 14px;
+      color: #1B4332;
+      font-weight: 600;
+    }
+    .sentence.done {
+      color: #7a9e8a;
+    }
+    .conj {
+      color: #C9A84C;
+      font-weight: 700;
+    }
+    .controls {
+      padding: 1.5rem 2rem;
+      border-top: 1px solid #e0d9cc;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      flex: 1;
+      min-width: 120px;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: Arial, sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-play {
+      background: #1B4332;
+      color: #FAF6EF;
+    }
+    .btn-play:hover { background: #163528; }
+    .btn-pause {
+      background: #C9A84C;
+      color: #1B4332;
+    }
+    .btn-pause:hover { background: #b8840f; }
+    .btn-stop {
+      background: #e0d9cc;
+      color: #1B4332;
+    }
+    .btn-stop:hover { background: #d0c9bb; }
+    .progress {
+      padding: 0 2rem 1.5rem;
+      font-size: 12px;
+      color: #9a9080;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    .legend {
+      margin: 1rem 2rem;
+      background: #f5f0e5;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-family: Arial, sans-serif;
+      color: #4a6358;
+      border-left: 3px solid #C9A84C;
+    }
+    .legend strong { color: #C9A84C; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="card-header">
+    <h1>🐶 Ein neuer Hund</h1>
+    <p>Apasă ▶ pentru a asculta • Sau apasă pe o propoziție</p>
+  </div>
+
+  <div class="story" id="story">
+    <span class="sentence" data-index="0">Heute ist Samstag <span class="conj">und</span> die Sonne scheint.</span>
+    <span class="sentence" data-index="1">Lisa geht in den Park, <span class="conj">denn</span> sie hat einen neuen Hund.</span>
+    <span class="sentence" data-index="2">Der Hund heißt Bello.</span>
+    <span class="sentence" data-index="3">Bello ist klein, <span class="conj">aber</span> er läuft sehr schnell.</span>
+    <span class="sentence" data-index="4">Lisa wirft einen Ball.</span>
+    <span class="sentence" data-index="5">Bello läuft <span class="conj">und</span> bringt den Ball zurück.</span>
+    <span class="sentence" data-index="6">Ein Kind sieht Bello <span class="conj">und</span> fragt: „Ist das dein Hund <span class="conj">oder</span> der Hund deiner Mutter?"</span>
+    <span class="sentence" data-index="7">Lisa lacht: „Er ist mein Hund, <span class="conj">aber</span> meine Mutter liebt ihn auch!"</span>
+    <span class="sentence" data-index="8">Das Kind will den Hund streicheln, <span class="conj">denn</span> er ist so süß.</span>
+    <span class="sentence" data-index="9">Bello bellt nicht, <span class="conj">sondern</span> er wedelt mit dem Schwanz.</span>
+    <span class="sentence" data-index="10">Lisa ist glücklich, <span class="conj">denn</span> Bello ist ihr bester Freund.</span>
+  </div>
+
+  <div class="legend">
+    Conjuncții: <strong>und</strong> = și &nbsp;·&nbsp; <strong>aber</strong> = dar &nbsp;·&nbsp; <strong>oder</strong> = sau &nbsp;·&nbsp; <strong>denn</strong> = pentru că &nbsp;·&nbsp; <strong>sondern</strong> = ci
+  </div>
+
+  <div class="controls">
+    <button class="btn btn-play" id="btnPlay" onclick="startReading()">▶ Ascultă</button>
+    <button class="btn btn-pause" id="btnPause" onclick="pauseReading()" style="display:none">⏸ Pauză</button>
+    <button class="btn btn-stop" onclick="stopReading()">⏹ Stop</button>
+  </div>
+  <div class="progress" id="progress">Propoziția 0 / 11</div>
+</div>
+
+<script>
+  const sentences = Array.from(document.querySelectorAll('.sentence'));
+  const cleanTexts = [
+    "Heute ist Samstag und die Sonne scheint.",
+    "Lisa geht in den Park, denn sie hat einen neuen Hund.",
+    "Der Hund heißt Bello.",
+    "Bello ist klein, aber er läuft sehr schnell.",
+    "Lisa wirft einen Ball.",
+    "Bello läuft und bringt den Ball zurück.",
+    "Ein Kind sieht Bello und fragt: Ist das dein Hund oder der Hund deiner Mutter?",
+    "Lisa lacht: Er ist mein Hund, aber meine Mutter liebt ihn auch!",
+    "Das Kind will den Hund streicheln, denn er ist so süß.",
+    "Bello bellt nicht, sondern er wedelt mit dem Schwanz.",
+    "Lisa ist glücklich, denn Bello ist ihr bester Freund."
+  ];
+
+  let currentIndex = 0;
+  let isPaused = false;
+  let isPlaying = false;
+
+  sentences.forEach(s => {
+    s.addEventListener('click', () => {
+      stopReading();
+      currentIndex = parseInt(s.dataset.index);
+      readFrom(currentIndex);
+    });
+  });
+
+  function getVoice() {
+    const voices = speechSynthesis.getVoices();
+    return voices.find(v => v.lang.startsWith('de') && v.localService) ||
+           voices.find(v => v.lang.startsWith('de')) ||
+           null;
+  }
+
+  function highlightSentence(index) {
+    sentences.forEach((s, i) => {
+      s.classList.remove('active');
+      if (i < index) s.classList.add('done');
+      else s.classList.remove('done');
+    });
+    if (index < sentences.length) {
+      sentences[index].classList.add('active');
+      sentences[index].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+    document.getElementById('progress').textContent = `Propoziția ${index + 1} / ${sentences.length}`;
+  }
+
+  function readFrom(index) {
+    if (index >= cleanTexts.length) {
+      stopReading();
+      document.getElementById('progress').textContent = '✓ Gata!';
+      return;
+    }
+
+    isPlaying = true;
+    isPaused = false;
+    document.getElementById('btnPlay').style.display = 'none';
+    document.getElementById('btnPause').style.display = 'block';
+
+    highlightSentence(index);
+
+    const utter = new SpeechSynthesisUtterance(cleanTexts[index]);
+    utter.lang = 'de-DE';
+    utter.rate = 0.85;
+    utter.pitch = 1;
+    const voice = getVoice();
+    if (voice) utter.voice = voice;
+
+    utter.onend = () => {
+      if (!isPaused) {
+        currentIndex = index + 1;
+        readFrom(currentIndex);
+      }
+    };
+
+    speechSynthesis.speak(utter);
+  }
+
+  function startReading() {
+    if (isPaused) {
+      isPaused = false;
+      speechSynthesis.resume();
+      document.getElementById('btnPlay').style.display = 'none';
+      document.getElementById('btnPause').style.display = 'block';
+    } else {
+      stopReading();
+      readFrom(currentIndex);
+    }
+  }
+
+  function pauseReading() {
+    isPaused = true;
+    speechSynthesis.pause();
+    document.getElementById('btnPlay').style.display = 'block';
+    document.getElementById('btnPause').style.display = 'none';
+  }
+
+  function stopReading() {
+    isPaused = false;
+    isPlaying = false;
+    speechSynthesis.cancel();
+    sentences.forEach(s => { s.classList.remove('active', 'done'); });
+    currentIndex = 0;
+    document.getElementById('btnPlay').style.display = 'block';
+    document.getElementById('btnPause').style.display = 'none';
+    document.getElementById('progress').textContent = `Propoziția 0 / ${sentences.length}`;
+  }
+
+  // Load voices
+  speechSynthesis.onvoiceschanged = () => {};
+</script>
+</body>
+</html>
